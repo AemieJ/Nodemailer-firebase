@@ -10,8 +10,8 @@ Firebase is a mobile and web application development platform developed by Fireb
 
 * [Node](https://nodejs.org/en/docs/)
 * [Express](https://expressjs.com/) - Fast, unopinionated, minimalist web framework for Node.js
-* [Nodemailer]
-* [Firebase]
+* [Nodemailer]()
+* [Firebase]()
 
 ## AUTHOR
 
