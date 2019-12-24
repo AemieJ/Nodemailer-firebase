@@ -91,6 +91,10 @@ app.post('/send', (request, response)=>{
     });
 });
 
+app.post('/contact', (request, response)=>{
+    response.render('contact');
+});
+
 app.post('/subscribe', (request, response)=>{
     response.render('subscribers');
     let email = request.body.email;
@@ -103,10 +107,18 @@ app.post('/subscribe', (request, response)=>{
         });
     });
 
+    subscriberRef.on('value', (snap)=>{
+        snap.forEach((childSnap)=>{
+            let details = childSnap.val();
+            if(details.email == email)
+                ++count;
+        });
+    });
+
     if(Object.keys(request.body).length && !count)
         console.log(`${email} is not in database.`);
 
-    else if(Object.keys(request.body).length && count){
+    else if(Object.keys(request.body).length && count==1){
         const newSubscriber = subscriberRef.push();
         newSubscriber.set({
             email: `${email}`
