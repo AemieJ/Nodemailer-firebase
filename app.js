@@ -3,11 +3,27 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const expressHandlebars = require('express-handlebars');
 const nodemailer = require('nodemailer');
+const admin = require('firebase-admin');
 
 const app = express();  
 const port = 3000 || process.env.port;
 const username = require("./id.json").username;
 const password = require("./id.json").password;
+const serviceAccount = require("./serviceAccountKey.json");
+
+// Set up firebase 
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://sparsh-replica.firebaseio.com"
+});
+
+// Firebase Real-time database setup
+const db = admin.database();
+const ref = db.ref("server/saving-data");
+const subscribers = db.ref("server/subscribers");
+
+const userRef = ref.child("users");
+const subscriberRef = ref.child("users");
 
 // Add middleware setup for handlebars
 app.engine('handlebars', expressHandlebars({defaultLayout : 'main'}));
@@ -27,6 +43,12 @@ app.get('/', (request, response)=>{
 
 app.post('/send', (request, response)=>{
     const toMail = request.body.email;
+    const newUser = userRef.push();
+    newUser.set({
+        name: `${request.body.name}`,
+        email: `${request.body.email}`
+    });
+
     const output = `
         <p> Contact Details </p>
         <ul>
@@ -67,8 +89,10 @@ app.post('/send', (request, response)=>{
         console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
         response.render('confirmation');
     });
+});
 
-
+app.post('/subscribe', (request, response)=>{
+    response.render('subscribers');
 });
 
 app.listen(port, ()=> console.log(`Server connected at ${port}`));
