@@ -85,14 +85,10 @@ app.post('/send', (request, response)=>{
             console.error(error);
         }
 
-        console.log("Message sent: %s", info.messageId);
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        //console.log("Message sent: %s", info.messageId);
+        //console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
         response.render('confirmation');
     });
-});
-
-app.post('/contact', (request, response)=>{
-    response.render('contact');
 });
 
 app.post('/subscribe', (request, response)=>{
