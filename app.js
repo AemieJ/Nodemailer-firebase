@@ -41,6 +41,10 @@ app.get('/', (request, response)=>{
     response.render('contact');
 });
 
+app.post('/', (request, response)=>{
+    response.render('contact');
+});
+
 app.post('/send', (request, response)=>{
     const toMail = request.body.email;
     const newUser = userRef.push();
@@ -75,9 +79,14 @@ app.post('/send', (request, response)=>{
     let mailOptions = {
         from: `"Aemie Jariwala" ${username}`, // sender address
         to: `${toMail}`, // list of receivers
-        subject: "Test email", // Subject line
-        text: "Hello world", // plain text body
-        html: output // html body
+        subject: "Test email with sample text", // Subject line
+        html: output, // html body
+        attachments: [
+            {
+                path: './sampleText.txt'
+            }
+        ]
+
     };
 
     transporter.sendMail(mailOptions, (error, info)=>{
