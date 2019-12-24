@@ -23,7 +23,7 @@ const ref = db.ref("server/saving-data");
 const subscribers = db.ref("server/subscribers");
 
 const userRef = ref.child("users");
-const subscriberRef = ref.child("users");
+const subscriberRef = subscribers.child("email");
 
 // Add middleware setup for handlebars
 app.engine('handlebars', expressHandlebars({defaultLayout : 'main'}));
@@ -93,6 +93,26 @@ app.post('/send', (request, response)=>{
 
 app.post('/subscribe', (request, response)=>{
     response.render('subscribers');
+    let email = request.body.email;
+    let count = 0;
+    userRef.on('value', (snap)=>{
+        snap.forEach((childSnap)=>{
+            let detail = childSnap.val();
+            if(detail.email == email)
+                ++count;
+        });
+    });
+
+    if(Object.keys(request.body).length && !count)
+        console.log(`${email} is not in database.`);
+
+    else if(Object.keys(request.body).length && count){
+        const newSubscriber = subscriberRef.push();
+        newSubscriber.set({
+            email: `${email}`
+        });
+    }
+
 });
 
 app.listen(port, ()=> console.log(`Server connected at ${port}`));
