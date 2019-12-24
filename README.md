@@ -15,4 +15,4 @@ Firebase is a mobile and web application development platform developed by Fireb
 
 ## AUTHOR
 
-* **AemieJ** - [AemieJ](https://github.com/AemieJ)
+* **Aemie Jariwala** - [AemieJ](https://github.com/AemieJ)
